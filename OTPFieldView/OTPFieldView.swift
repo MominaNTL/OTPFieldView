@@ -341,3 +341,28 @@ extension OTPFieldView: UITextFieldDelegate {
         calculateEnteredOTPSTring(isDeleted: true)
     }
 }
+extension OTPFieldView {
+    public func clearAllTextFields() {
+        // Iterate through all OTP text fields and clear their text
+        for index in stride(from: 0, to: fieldsCount, by: 1) {
+            if let otpField = viewWithTag(index + 1) as? OTPTextField {
+                otpField.text = ""
+                secureEntryData[index] = ""
+                
+                // Reset background and border colors to default
+                if displayType == .diamond || displayType == .underlinedBottom {
+                    if let shapeLayer = otpField.shapeLayer {
+                        shapeLayer.fillColor = defaultBackgroundColor.cgColor
+                        shapeLayer.strokeColor = defaultBorderColor.cgColor
+                    }
+                } else {
+                    otpField.backgroundColor = defaultBackgroundColor
+                    otpField.layer.borderColor = defaultBorderColor.cgColor
+                }
+            } else {
+                // Handle case when otpField is not found (optional)
+                print("Warning: OTP field with tag \(index + 1) not found.")
+            }
+        }
+    }
+}
